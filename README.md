@@ -8,7 +8,13 @@ This repository includes the promotions test developed by Adrià Roca.
 
 ## Installation
 
-//TODO
+It's mandatory to have [docker](https://www.docker.com/) installed.
+
+Run:
+
+```shell
+./devops/tools/dev_start
+```
 
 ## Testing
 
