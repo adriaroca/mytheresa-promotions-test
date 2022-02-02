@@ -5,7 +5,6 @@ namespace Tests\Feature\Application\UseCases\Product;
 use App\Domain\Values\ProductFilters;
 use App\Models\Product;
 use App\UseCases\Product\GetProductsByFiltersUseCase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\Feature\Application\UseCases\UseCaseBaseTest;
 
 /**
@@ -49,6 +48,32 @@ class GetProductsByFiltersUseCaseTest extends UseCaseBaseTest
         $this->assertIsArray($products);
         $this->assertCount(4, $products);
         $this->assertInstanceOf(\App\Domain\Entities\Product::class, $products[0]);
+    }
+
+    public function test_max_results_without_discount_by_category()
+    {
+        $testCategory = 'no-discount-category';
+        Product::factory(20)->create([
+            'category' => 'no-discount-category',
+        ]);
+
+        $productFilters = new ProductFilters();
+        $productFilters->setCategory($testCategory);
+        $products = $this->invokeUseCase($productFilters, 5);
+
+        $this->assertIsArray($products);
+        $this->assertCount(5, $products);
+    }
+
+    public function test_max_results_without_discount_and_without_filters()
+    {
+        Product::factory(12)->create();
+
+        $productFilters = new ProductFilters();
+        $products = $this->invokeUseCase($productFilters, 6);
+
+        $this->assertIsArray($products);
+        $this->assertCount(6, $products);
     }
 
 }

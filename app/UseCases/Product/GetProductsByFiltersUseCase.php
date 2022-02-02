@@ -28,14 +28,14 @@ class GetProductsByFiltersUseCase
      * @param ProductFilters $productFilters
      * @return array<int,Product>
      */
-    public function __invoke(ProductFilters $productFilters): array
+    public function __invoke(ProductFilters $productFilters, int $limit = null): array
     {
         $category = $productFilters->getCategory();
 
         if ($category !== null) {
-            $products = $this->productRepository->getByCategory($category);
+            $products = $this->productRepository->getByCategory($category, $limit);
         } else {
-            $products = $this->productRepository->all();
+            $products = $this->productRepository->all($limit);
         }
 
         return $products;

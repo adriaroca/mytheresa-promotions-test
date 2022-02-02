@@ -17,7 +17,7 @@ class GetProductsController extends Controller
         $productFilters = new ProductFilters();
         $productFilters->setCategory($category);
 
-        $products = $getProductsByFiltersUseCase->__invoke($productFilters);
+        $products = $getProductsByFiltersUseCase->__invoke($productFilters, config('api.product.list.max_results'));
 
         return response()->json([
             'products' => collect($products)->map(function (Product $product) {

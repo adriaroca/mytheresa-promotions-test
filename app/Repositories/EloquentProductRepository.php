@@ -22,9 +22,15 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     /**
      * @return array<int, DomainProduct>
      */
-    public function all(): array
+    public function all(int $limit = null): array
     {
-        $modelProducts = $this->model->all();
+
+        if($limit) {
+            $modelProducts = $this->model->limit($limit)->get();
+        } else {
+            $modelProducts = $this->model->all();
+        }
+
         return $modelProducts->map(function (ModelProduct $modelProduct) {
             return EloquentProductModelToDomainProduct::transform($modelProduct);
         })->toArray();
@@ -33,10 +39,14 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     /**
      * @return array<int, DomainProduct>
      */
-    public function getByCategory(string $category): array
+    public function getByCategory(string $category, int $limit = null): array
     {
-        $modelProducts = $this->model->where('category', $category)->get();
-        return $modelProducts->map(function (ModelProduct $modelProduct) {
+        $modelProducts = $this->model->where('category', $category);
+        if($limit) {
+            $modelProducts = $modelProducts->limit($limit);
+        }
+
+        return $modelProducts->get()->map(function (ModelProduct $modelProduct) {
             return EloquentProductModelToDomainProduct::transform($modelProduct);
         })->toArray();
     }

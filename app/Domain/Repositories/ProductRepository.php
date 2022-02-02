@@ -8,6 +8,6 @@ namespace App\Domain\Repositories;
  */
 interface ProductRepository
 {
-    public function all(): array;
-    public function getByCategory(string $category): array;
+    public function all(int $limit = null): array;
+    public function getByCategory(string $category, int $limit = null): array;
 }
