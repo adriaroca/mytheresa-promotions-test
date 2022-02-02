@@ -14,17 +14,11 @@ class EloquentProductModelToDomainProduct
 {
     public static function transform(ModelProduct $modelProduct): DomainProduct
     {
-        $productPrice = new ProductPrice(
-            $modelProduct->price,
-            $modelProduct->price,
-            null,
-        );
-
         return new DomainProduct(
             $modelProduct->sku,
             $modelProduct->name,
             $modelProduct->category,
-            $productPrice
+            $modelProduct->price
         );
     }
 }

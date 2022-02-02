@@ -31,13 +31,13 @@ class Product
         string $sku,
         string $name,
         string $category,
-        ProductPrice $price
+        int $price
     )
     {
         $this->sku = $sku;
         $this->name = $name;
         $this->category = $category;
-        $this->price = $price;
+        $this->price = ProductPrice::fromProduct($sku, $category, $price);
     }
 
     /**

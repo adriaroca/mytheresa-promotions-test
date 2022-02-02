@@ -38,6 +38,29 @@ class ProductPrice
         $this->currency = $currency;
     }
 
+    public static function fromProduct(string $sku, string $category, int $price): self
+    {
+        $skuWithDiscount = [
+            '000003' => 15,
+        ];
+
+        $categoriesWithDiscount = [
+            'boots' => 30,
+        ];
+
+        $skuDiscount = $skuWithDiscount[$sku] ?? null;
+        $categoryDiscount = $categoriesWithDiscount[$category] ?? null;
+
+        $discount = max($skuDiscount, $categoryDiscount);
+        $finalPrice = $discount ? $price - ($price * ($discount/100)) : $price;
+
+        return new self(
+            $price,
+            $finalPrice,
+            $discount,
+        );
+    }
+
     /**
      * @return int
      */

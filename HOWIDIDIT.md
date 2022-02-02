@@ -25,3 +25,17 @@ Once we have the endpoint with category filter and test coverage, we are going t
 ### Step4: Return at most 5 elements
 
 For this feature, I'm going to put limits on the results of the use case as an optional argument.
+
+### Step 5: Apply discounts
+
+There are three rules for applying discounts. From documentation:
+
+- Products in the boots category have a 30% discount.
+- The product with sku = 000003 has a 15% discount.
+- When multiple discounts collide, the bigger discount must be applied.
+
+I'm going to encapsulate this business logic in the `ProductPrice` domain object. For this, I will modify the price object requested in the `Product` entity constructor. Instead of an object, I'm going to ask for the integer of the price and then construct the object internally. 
+
+I have directly hardcoded the rules in the method. This is obviously not a good solution. It could be obtained by saving the values in the database or in a configuration file.
+
+
