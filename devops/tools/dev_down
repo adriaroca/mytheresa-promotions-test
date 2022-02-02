@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./vendor/bin/sail down
+./vendor/bin/sail down -v;
