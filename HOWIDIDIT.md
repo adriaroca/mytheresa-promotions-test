@@ -17,3 +17,8 @@ I will develop the endpoint by first creating the test ([TDD](https://en.wikiped
 So, we will use the facilities of `artisan` to create the files needed (controller, tests, factories, migrations...).
 
 First, I will implement the test that filters products by category. For now, we will ignore the other requests.
+
+### Step 3: Get products endpoint refactor
+
+Once we have the endpoint with category filter and test coverage, we are going to refactor. What I have in mind is to separate the framework from our domain a bit. I will encapsulate the logic used in a single UseCase and abstract the [Eloquent](https://laravel.com/docs/8.x/eloquent) (Laravel's default [ORM](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)) using repositories. Normally I would also create a service for the product domain at this point to store all the related logic, but at the moment I don't see it necessary. I will also create separate entities and value objects.
+

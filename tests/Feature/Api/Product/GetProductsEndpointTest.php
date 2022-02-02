@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Api\Product;
 
+use App\Mappers\EloquentProductModelToDomainProduct;
 use App\Models\Product;
+use App\UseCases\Product\GetProductsByFiltersUseCase;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
@@ -12,6 +15,21 @@ use Tests\TestCase;
 class GetProductsEndpointTest extends TestCase
 {
     private $uri = '/api/products';
+    private $responseJsonStructure = [
+        'products' => [
+            '*' => [
+                'sku',
+                'name',
+                'category',
+                'price' => [
+                    'original',
+                    'final',
+                    'discount_percentage',
+                    'currency',
+                ],
+            ]
+        ]
+    ];
 
     protected function setUp(): void
     {
@@ -28,13 +46,17 @@ class GetProductsEndpointTest extends TestCase
     public function test_multiple_product_results_without_discount_by_category()
     {
         $testCategory = 'no-discount-category';
-        Product::factory(3)->create([
+        $testProducts = Product::factory(3)->make([
             'category' => $testCategory,
         ]);
 
-        Product::factory(3)->create([
-            'category' => 'another-category',
-        ]);
+        $this->mock(GetProductsByFiltersUseCase::class, function (MockInterface $mock) use ($testProducts) {
+            $mock->shouldReceive('__invoke')->andReturn(
+                $testProducts->map(function ($testProduct) {
+                    return EloquentProductModelToDomainProduct::transform($testProduct);
+                })->toArray()
+            )->once();
+        });
 
         $response = $this->json('GET', $this->uri, [
             'category' => $testCategory,
@@ -42,16 +64,25 @@ class GetProductsEndpointTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(function (AssertableJson $json) {
-            $json->has('products', 3, fn ($json) =>
-                $json->where('category', 'no-discount-category')
-                    ->etc()
-            );
+            $json->has('products', 3, function ($json) {
+                $json->where('category', 'no-discount-category')->etc();
+            });
         });
+
+        $response->assertJsonStructure($this->responseJsonStructure);
     }
 
     public function test_multiple_product_results_without_discount_and_without_filters()
     {
-        Product::factory(4)->create();
+        $testProducts = Product::factory(4)->make();
+
+        $this->mock(GetProductsByFiltersUseCase::class, function (MockInterface $mock) use ($testProducts) {
+            $mock->shouldReceive('__invoke')->andReturn(
+                $testProducts->map(function ($testProduct) {
+                    return EloquentProductModelToDomainProduct::transform($testProduct);
+                })->toArray()
+            )->once();
+        });
 
         $response = $this->json('GET', $this->uri);
 
@@ -59,5 +90,7 @@ class GetProductsEndpointTest extends TestCase
         $response->assertJson(function (AssertableJson $json) {
             $json->has('products', 4);
         });
+
+        $response->assertJsonStructure($this->responseJsonStructure);
     }
 }
