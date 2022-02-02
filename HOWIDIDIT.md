@@ -38,4 +38,24 @@ I'm going to encapsulate this business logic in the `ProductPrice` domain object
 
 I have directly hardcoded the rules in the method. This is obviously not a good solution. It could be obtained by saving the values in the database or in a configuration file.
 
+### Step 6: Discount response with '%' sign
 
+Reading the documentation again I have seen that the 'discount_percentage' field has to include the '%' in the response. Let's add it.
+
+```json
+{
+    "products": [
+        {
+            "sku": "08471093",
+            "name": "nkkvth vfqxe",
+            "category": "boots",
+            "price": {
+                "original": 923577,
+                "final": 646503,
+                "discount_percentage": "30%",
+                "currency": "EUR"
+            }
+        }
+    ]
+}
+```

@@ -127,10 +127,12 @@ class ProductPrice
 
     public function toArray(): array
     {
+        $discountPercentage = $this->getDiscountPercentage();
+
         return [
             'original' => $this->getOriginal(),
             'final' => $this->getFinal(),
-            'discount_percentage' => $this->getDiscountPercentage(),
+            'discount_percentage' => !is_null($discountPercentage) ? $discountPercentage.'%' : null,
             'currency' => $this->getCurrency(),
         ];
     }
