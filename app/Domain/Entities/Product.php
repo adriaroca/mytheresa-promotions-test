@@ -37,7 +37,7 @@ class Product
         $this->sku = $sku;
         $this->name = $name;
         $this->category = $category;
-        $this->price = ProductPrice::fromProduct($sku, $category, $price);
+        $this->price = new ProductPrice($price, $price);
     }
 
     /**

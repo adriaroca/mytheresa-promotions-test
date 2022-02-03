@@ -13,9 +13,11 @@ class GetProductsController extends Controller
     public function __invoke(Request $request, GetProductsByFiltersUseCase $getProductsByFiltersUseCase)
     {
         $category = $request->get('category');
+        $applyDiscount = $request->boolean('discount', true);
 
         $productFilters = new ProductFilters();
         $productFilters->setCategory($category);
+        $productFilters->setApplyDiscount($applyDiscount);
 
         $products = $getProductsByFiltersUseCase->__invoke($productFilters, config('api.product.list.max_results'));
 

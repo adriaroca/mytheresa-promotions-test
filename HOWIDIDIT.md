@@ -59,3 +59,50 @@ Reading the documentation again I have seen that the 'discount_percentage' field
     ]
 }
 ```
+
+### Step 7: Apply discount when necessary
+
+Discounts always apply. It would be better to add a parameter to specify if we want the discount to be applied or not. We're going to call it `discount=false`. By default, value is still true.
+
+```http request
+http://localhost:81/api/products?category=boots&discount=false
+```
+```json
+{
+    "products": [
+        {
+            "sku": "71909608",
+            "name": "wjskcc kcabc",
+            "category": "boots",
+            "price": {
+                "original": 35873,
+                "final": 35873,
+                "discount_percentage": null,
+                "currency": "EUR"
+            }
+        }
+    ]
+}
+```
+
+```http request
+http://localhost:81/api/products?category=boots&discount=true
+```
+
+```json
+{
+    "products": [
+        {
+            "sku": "71909608",
+            "name": "wjskcc kcabc",
+            "category": "boots",
+            "price": {
+                "original": 35873,
+                "final": 35873,
+                "discount_percentage": null,
+                "currency": "EUR"
+            }
+        }
+    ]
+}
+```

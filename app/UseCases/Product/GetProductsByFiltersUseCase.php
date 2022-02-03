@@ -5,6 +5,7 @@ namespace App\UseCases\Product;
 use App\Domain\Entities\Product;
 use App\Domain\Repositories\ProductRepository;
 use App\Domain\Values\ProductFilters;
+use App\Domain\Values\ProductPrice;
 
 /**
  * Author: adriaroca
@@ -31,11 +32,21 @@ class GetProductsByFiltersUseCase
     public function __invoke(ProductFilters $productFilters, int $limit = null): array
     {
         $category = $productFilters->getCategory();
+        $applyDiscount = $productFilters->applyDiscount();
 
         if ($category !== null) {
             $products = $this->productRepository->getByCategory($category, $limit);
         } else {
             $products = $this->productRepository->all($limit);
+        }
+
+        if($applyDiscount) {
+            $products = collect($products)->map(function (Product $product) {
+                $currentProductPrice = $product->getPrice();
+                $productPrice = ProductPrice::fromProduct($product->getSku(), $product->getCategory(), $currentProductPrice->getOriginal());
+                $product->setPrice($productPrice);
+                return $product;
+            })->toArray();
         }
 
         return $products;

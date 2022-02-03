@@ -38,8 +38,12 @@ class ProductPrice
         $this->currency = $currency;
     }
 
-    public static function fromProduct(string $sku, string $category, int $price): self
+    public static function fromProduct(string $sku, string $category, int $price, bool $applyDiscount = true): self
     {
+        if($applyDiscount === false) {
+            return new ProductPrice($price, $price);
+        }
+
         $skuWithDiscount = [
             '000003' => 15,
         ];

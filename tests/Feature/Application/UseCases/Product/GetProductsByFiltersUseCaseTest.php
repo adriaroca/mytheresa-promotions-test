@@ -76,4 +76,34 @@ class GetProductsByFiltersUseCaseTest extends UseCaseBaseTest
         $this->assertCount(6, $products);
     }
 
+    public function test_results_applying_discount()
+    {
+        Product::factory()->create([
+            'price' => 89000,
+            'category' => 'boots', //category with discount
+        ]);
+
+        $productFilters = new ProductFilters();
+        $productFilters->setApplyDiscount(true);
+
+        $products = $this->invokeUseCase($productFilters, 1);
+
+        $this->assertIsArray($products);
+        $this->assertNotEquals($products[0]->getPrice()->getOriginal(), $products[0]->getPrice()->getFinal());
+    }
+
+    public function test_results_without_applying_discount()
+    {
+        Product::factory(1)->create([
+            'category' => 'boots', //category with discount
+        ]);
+
+        $productFilters = new ProductFilters();
+        $productFilters->setApplyDiscount(false);
+
+        $products = $this->invokeUseCase($productFilters, 1);
+
+        $this->assertEquals($products[0]->getPrice()->getOriginal(), $products[0]->getPrice()->getFinal());
+    }
+
 }
