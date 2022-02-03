@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+composer install;
+
 ./vendor/bin/sail up -d;
 
 until ./vendor/bin/sail artisan migrate --seed  > /dev/null; do
