@@ -106,3 +106,26 @@ http://localhost:81/api/products?category=boots&discount=true
     ]
 }
 ```
+
+### Pending tasks
+
+- I have discarded the functionality to order prices due to lack of time.
+- Add an Api Key.
+- Indexing / caching system to speed up searches and responses.
+- It would be interesting to modify the folder structure. I would rename the `app` folder to `src` and classify its contents into three folders: Domain (already exists), Application, Infrastructure.
+
+```shell
+- src
+-- Application
+  - Http
+  - Models
+  - Providers
+  - UseCases
+-- Domain
+  - Entities
+  - Repositories (contracts)
+  - Values
+-- Infraestructure
+  - Mappers
+  - Repositories (implementation)
+```

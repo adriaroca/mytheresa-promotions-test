@@ -18,4 +18,6 @@ Run:
 
 ## Testing
 
-//TODO
+```shell
+./devops/tools/dev_tests
+```

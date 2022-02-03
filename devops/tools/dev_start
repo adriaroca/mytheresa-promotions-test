@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
 ./vendor/bin/sail up -d;
-./vendor/bin/sail artisan migrate;
+
+until ./vendor/bin/sail artisan migrate --seed  > /dev/null; do
+  echo 'Waiting...'
+  sleep 3
+done
