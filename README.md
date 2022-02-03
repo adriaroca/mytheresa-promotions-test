@@ -8,7 +8,7 @@ This repository includes the promotions test developed by Adrià Roca.
 
 ## Installation
 
-It's mandatory to have [docker](https://www.docker.com/) installed.
+It's mandatory to have [docker](https://www.docker.com/), composer and PHP ^8.0 installed.
 
 Run:
 
